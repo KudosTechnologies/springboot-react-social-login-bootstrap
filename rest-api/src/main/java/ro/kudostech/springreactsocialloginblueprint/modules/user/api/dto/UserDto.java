@@ -1,10 +1,11 @@
-package ro.kudostech.springreactsocialloginblueprint.modules.user.api.model;
+package ro.kudostech.springreactsocialloginblueprint.modules.user.api.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.internal.domain.OAuth2Provider;
 
 @Builder
-public record User(
+public record UserDto(
     @NotNull Long id,
     @NotNull String password,
     String name,

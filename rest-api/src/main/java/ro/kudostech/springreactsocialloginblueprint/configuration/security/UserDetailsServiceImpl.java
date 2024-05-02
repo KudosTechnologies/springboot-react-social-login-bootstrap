@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ro.kudostech.springreactsocialloginblueprint.configuration.security.oauth2.CustomUserDetails;
 import ro.kudostech.springreactsocialloginblueprint.modules.user.api.UserService;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.api.model.User;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.api.dto.UserDto;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) {
-    User user =
+    UserDto userDto =
         userService
             .getUserByEmail(username)
             .orElseThrow(
@@ -28,18 +28,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     new UsernameNotFoundException(
                         String.format("Username %s not found", username)));
     List<SimpleGrantedAuthority> authorities =
-        Collections.singletonList(new SimpleGrantedAuthority(user.role()));
-    return mapUserToCustomUserDetails(user, authorities);
+        Collections.singletonList(new SimpleGrantedAuthority(userDto.role()));
+    return mapUserToCustomUserDetails(userDto, authorities);
   }
 
   private CustomUserDetails mapUserToCustomUserDetails(
-      User user, List<SimpleGrantedAuthority> authorities) {
+      UserDto userDto, List<SimpleGrantedAuthority> authorities) {
     CustomUserDetails customUserDetails = new CustomUserDetails();
-    customUserDetails.setId(user.id());
-    customUserDetails.setUsername(user.email());
-    customUserDetails.setPassword(user.password());
-    customUserDetails.setName(user.name());
-    customUserDetails.setEmail(user.email());
+    customUserDetails.setId(userDto.id());
+    customUserDetails.setUsername(userDto.email());
+    customUserDetails.setPassword(userDto.password());
+    customUserDetails.setName(userDto.name());
+    customUserDetails.setEmail(userDto.email());
     customUserDetails.setAuthorities(authorities);
     return customUserDetails;
   }

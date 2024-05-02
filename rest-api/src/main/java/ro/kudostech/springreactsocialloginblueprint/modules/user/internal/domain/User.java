@@ -1,4 +1,4 @@
-package ro.kudostech.springreactsocialloginblueprint.modules.user.internal.entity;
+package ro.kudostech.springreactsocialloginblueprint.modules.user.internal.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,15 +8,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.api.model.OAuth2Provider;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
+@Setter
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
-public class UserEntity {
+public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -27,11 +32,11 @@ public class UserEntity {
   @Column(unique = true)
   private String email;
 
-  private String role;
+  @Enumerated(EnumType.STRING)
+  private UserRole role;
+
   private String imageUrl;
 
   @Enumerated(EnumType.STRING)
   private OAuth2Provider provider;
-
-  private String providerId;
 }

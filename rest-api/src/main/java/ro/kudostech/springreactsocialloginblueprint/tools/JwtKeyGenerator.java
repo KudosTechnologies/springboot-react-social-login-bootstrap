@@ -3,7 +3,6 @@ package ro.kudostech.springreactsocialloginblueprint.tools;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
-
 import javax.crypto.SecretKey;
 
 public class JwtKeyGenerator {

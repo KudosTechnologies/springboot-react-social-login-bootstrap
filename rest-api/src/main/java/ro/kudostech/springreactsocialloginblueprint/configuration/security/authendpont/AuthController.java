@@ -6,23 +6,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ro.kudostech.springreactsocialloginblueprint.configuration.security.TokenProvider;
-import ro.kudostech.springreactsocialloginblueprint.configuration.security.WebSecurityConfig;
 import ro.kudostech.springreactsocialloginblueprint.modules.user.api.UserService;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.api.model.User;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.api.dto.CreateUserRequestDto;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
   private final UserService userService;
-  private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final TokenProvider tokenProvider;
 
@@ -34,15 +31,15 @@ public class AuthController {
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("/signup")
-  public AuthResponse signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-    if (userService.hasUserWithEmail(signUpRequest.getEmail())) {
+  public AuthResponse signUp(@Valid @RequestBody CreateUserRequestDto signUpRequest) {
+    if (userService.hasUserWithEmail(signUpRequest.email())) {
       throw new DuplicatedUserInfoException(
-          String.format("Email %s already been used", signUpRequest.getEmail()));
+          String.format("Email %s already been used", signUpRequest.email()));
     }
 
-    userService.saveUser(mapSignUpRequestToUser(signUpRequest));
+    userService.createUser(signUpRequest);
 
-    String token = authenticateAndGetToken(signUpRequest.getEmail(), signUpRequest.getPassword());
+    String token = authenticateAndGetToken(signUpRequest.email(), signUpRequest.password());
     return new AuthResponse(token);
   }
 
@@ -51,13 +48,5 @@ public class AuthController {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(username, password));
     return tokenProvider.generate(authentication);
-  }
-
-  private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {
-    return User.builder()
-        .email(signUpRequest.getEmail())
-        .password(passwordEncoder.encode(signUpRequest.getPassword()))
-        .role(WebSecurityConfig.USER)
-        .build();
   }
 }

@@ -2,12 +2,12 @@ package ro.kudostech.springreactsocialloginblueprint.modules.user.internal.servi
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.api.model.User;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.internal.entity.UserEntity;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.api.dto.UserDto;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.internal.domain.User;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
-  UserEntity toUserEntity(User user);
+  User toUserEntity(UserDto userDto);
 
-  User toUser(UserEntity userEntity);
+  UserDto toUser(User user);
 }

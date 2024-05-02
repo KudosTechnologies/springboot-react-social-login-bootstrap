@@ -1,15 +1,15 @@
 package ro.kudostech.springreactsocialloginblueprint.configuration.security.oauth2;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import ro.kudostech.springreactsocialloginblueprint.configuration.security.WebSecurityConfig;
 import ro.kudostech.springreactsocialloginblueprint.modules.user.api.UserService;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.api.model.User;
-
-import java.util.List;
-import java.util.Optional;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.api.dto.CreateUserRequestDto;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.api.dto.UserDto;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.internal.domain.UserRole;
 
 @Service
 @RequiredArgsConstructor
@@ -28,22 +28,22 @@ public class CustomUserDetailsService {
 
     CustomUserDetails userDetails =
         oAuth2UserInfoExtractorOptional.get().extractUserInfo(oAuth2User);
-    User user = upsertUser(userDetails);
-    userDetails.setId(user.id());
+    UserDto userDto = upsertUser(userDetails);
+    userDetails.setId(userDto.id());
     return userDetails;
   }
 
-  private User upsertUser(CustomUserDetails customUserDetails) {
-    Optional<User> userOptional = userService.getUserByEmail(customUserDetails.getUsername());
+  private UserDto upsertUser(CustomUserDetails customUserDetails) {
+    Optional<UserDto> userOptional = userService.getUserByEmail(customUserDetails.getUsername());
     if (userOptional.isEmpty()) {
-      User user =
-          User.builder()
+      CreateUserRequestDto createUserRequest =
+          CreateUserRequestDto.builder()
               .email(customUserDetails.getEmail())
               .provider(customUserDetails.getProvider())
               .imageUrl(customUserDetails.getAvatarUrl())
-              .role(WebSecurityConfig.USER)
+              .role(UserRole.USER)
               .build();
-      return userService.saveUser(user);
+      return userService.createUser(createUserRequest);
     }
     return userOptional.get();
   }

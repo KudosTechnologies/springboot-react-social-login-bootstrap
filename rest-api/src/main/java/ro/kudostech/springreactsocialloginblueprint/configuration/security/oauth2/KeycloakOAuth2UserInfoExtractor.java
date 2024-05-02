@@ -4,8 +4,8 @@ import java.util.Collections;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
-import ro.kudostech.springreactsocialloginblueprint.configuration.security.WebSecurityConfig;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.api.model.OAuth2Provider;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.internal.domain.OAuth2Provider;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.internal.domain.UserRole;
 
 @Component
 public class KeycloakOAuth2UserInfoExtractor implements OAuth2UserInfoExtractor {
@@ -19,7 +19,7 @@ public class KeycloakOAuth2UserInfoExtractor implements OAuth2UserInfoExtractor 
     customUserDetails.setProvider(OAuth2Provider.KEYCLOAK);
     customUserDetails.setAttributes(oAuth2User.getAttributes());
     customUserDetails.setAuthorities(
-        Collections.singletonList(new SimpleGrantedAuthority(WebSecurityConfig.USER)));
+        Collections.singletonList(new SimpleGrantedAuthority(UserRole.USER.name())));
     return customUserDetails;
   }
 

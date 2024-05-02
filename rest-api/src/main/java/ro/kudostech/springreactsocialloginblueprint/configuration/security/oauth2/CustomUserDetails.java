@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import ro.kudostech.springreactsocialloginblueprint.modules.user.api.model.OAuth2Provider;
+import ro.kudostech.springreactsocialloginblueprint.modules.user.internal.domain.OAuth2Provider;
 
 @Data
 public class CustomUserDetails implements UserDetails, OidcUser {
