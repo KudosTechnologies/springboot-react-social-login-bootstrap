@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: Rest API
+  description: An API for managing user authentications.
+  version: 0.0.1
+  contact:
+    name: API Support
+    email: contact@kudostech.ro
+
+#paths:
+
+components:
+  schemas:
+    RFC7807ProblemDto:
+      description: Detailed information on the error
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: error time as UTC date-time
+        type:
+          type: string
+          format: uri
+          description: further information on the error
+          default: 'about:blank'
+        title:
+          type: string
+          description: error message
+          example: Bad Request
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code based on the following error codes (https://tools.ietf.org/html/rfc2616#section-10)
+          example: 400
+          minimum: 100
+          maximum: 600
+          exclusiveMaximum: true
+        detail:
+          type: string
+          description: further description of the error pattern
+          example: JSON parse error
+        traceId:
+          type: string
+          description: Trace id of the request
+          example: avx1234asd
+        instance:
+          type: string
+          format: uri
+          description: calling path
+        violations:
+          type: array
+          description: list of fields with incorrect content
+          items:
+            $ref: '#/components/schemas/ViolationDto'
+    ViolationDto:
+      description: description of a faulty field value
+      properties:
+        field:
+          type: string
+          description: name of the field
+          example: Company.companyId
+        message:
+          type: string
+          description: error description
+          example: must be greater than or equal to 1

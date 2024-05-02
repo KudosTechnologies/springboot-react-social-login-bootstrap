@@ -1,0 +1,6 @@
+keycloak:
+  base-url: ${KEYCLOAK_BASE_URL:http://localhost:9080}
+  admin-user: ${KEYCLOAK_ADMIN_USERNAME:admin}
+  admin-password: ${KEYCLOAK_ADMIN_PASSWORD:admin}
+  client-id: ${KEYCLOAK_CLIENT_ID:kudconnect}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:7b3b3b3e-7b3b-4b3b-8b3b-7b3b3b3b3b3b}

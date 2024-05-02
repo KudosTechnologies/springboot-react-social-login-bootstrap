@@ -1,0 +1,31 @@
+version: '3.8'
+name: spring-react-social-login-blueprint
+services:
+
+  postgres_social_db:
+    image: postgres:15.4
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=social_db
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    healthcheck:
+      test: "pg_isready -U postgres"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  keycloak:
+    image: ping-patrol-keycloak:latest
+    command: ['start-dev']
+    environment:
+      - KC_DB=dev-file
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_FEATURES=scripts
+      - KC_HTTP_PORT=9080
+    ports:
+      - "9080:9080"
+volumes:
+  postgres-data:
