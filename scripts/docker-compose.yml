@@ -3,7 +3,7 @@ name: spring-react-social-login-blueprint
 services:
 
   postgres_social_db:
-    image: postgres:16.2
+    image: postgres:17.3
     container_name: postgres
     ports:
       - "5432:5432"
